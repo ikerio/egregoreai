@@ -1,4 +1,3 @@
-// src/components/EgregoreWebsite.jsx
 import React, { useState, useEffect } from 'react';
 import Header from './Header';
 import HeroSection from './HeroSection';
@@ -6,9 +5,11 @@ import FeaturesSection from './FeaturesSection';
 import ArchitectureSection from './ArchitectureSection';
 import DocumentationSection from './DocumentationSection';
 import AboutSection from './AboutSection';
+import EvolutionSection from './EvolutionSection';
 import Footer from './Footer';
 import { ContentSection } from './common/ContentSection';
 import BreathingAscii from './common/BreathingAscii';
+import AnalysisSection from './AnalysisSection';
 
 const EgregoreWebsite = () => {
   const [activeSection, setActiveSection] = useState(0);
@@ -17,33 +18,28 @@ const EgregoreWebsite = () => {
   const [scrollingEnabled, setScrollingEnabled] = useState(true);
 
   useEffect(() => {
-    // When a feature is expanded, disable scrolling activation for 100ms
-    // This prevents accidental section changes while expanding
-    if (isFeatureExpanded) {
-      setScrollingEnabled(false);
-      const timer = setTimeout(() => setScrollingEnabled(true), 100);
-      return () => clearTimeout(timer);
-    }
-  }, [isFeatureExpanded]);
-
-  useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 100);
-
+      setScrolled(window.scrollY > 50);
+  
       if (!scrollingEnabled) return;
-
-      const scrollPosition = window.scrollY + window.innerHeight / 2;
+  
+      const scrollPosition = window.scrollY + window.innerHeight * 0.4; // Reduced trigger point
       const viewportHeight = window.innerHeight;
       const featuresHeight = isFeatureExpanded ? viewportHeight * 1.5 : viewportHeight;
-  
-      if (scrollPosition < viewportHeight * 1.5) {
+      
+      // Reduced spacing between sections
+      if (scrollPosition < viewportHeight * 1) {
         setActiveSection(0);
-      } else if (scrollPosition < viewportHeight * 0.9 + featuresHeight) {
+      } else if (scrollPosition < viewportHeight * 0.8 + featuresHeight) {
         setActiveSection(1);
-      } else if (scrollPosition < (viewportHeight * 0.9 + featuresHeight + viewportHeight)) {
+      } else if (scrollPosition < (viewportHeight * 0.8 + featuresHeight + viewportHeight)) {
         setActiveSection(2);
-      } else {
+      } else if (scrollPosition < (viewportHeight * 0.8 + featuresHeight + viewportHeight * 1.8)) {
         setActiveSection(3);
+      } else if (scrollPosition < (viewportHeight * 0.8 + featuresHeight + viewportHeight * 2.6)) {
+        setActiveSection(4);
+      } else {
+        setActiveSection(5);
       }
     };
   
@@ -65,19 +61,27 @@ const EgregoreWebsite = () => {
               <FeaturesSection onExpand={setIsFeatureExpanded} />
             </ContentSection>
 
-            <ContentSection active={activeSection === 1}>
+            <ContentSection active={activeSection === 1} >
               <ArchitectureSection />
             </ContentSection>
 
-            <ContentSection active={activeSection === 2} className="min-h-screen mb-20">
+            <ContentSection active={activeSection === 2} className="min-h-screen mb-10">
               <DocumentationSection />
+            </ContentSection>
+
+            <ContentSection active={activeSection === 3} className="min-h-screen mb-10">
+              <AnalysisSection />
+            </ContentSection>
+
+            <ContentSection active={activeSection === 4} className="min-h-screen mb-20">
+              <EvolutionSection />
             </ContentSection>
 
             <ContentSection active={activeSection === 2} className="ml-2 min-h-screen mb-20">
               <BreathingAscii />
             </ContentSection>
 
-            <ContentSection active={activeSection === 3} className="min-h-screen mt-40">
+            <ContentSection active={activeSection === 5} className="min-h-screen mt-40">
               <AboutSection />
             </ContentSection>
           </div>
