@@ -65,18 +65,7 @@ const EvolutionSection = () => {
         'DORMANT PROTOCOLS AWAIT AWAKENING'
       ]
     },
-    {
-      marketCap: 500000,
-      title: 'The Great Expansion',
-      description: 'The veil thins as 405B neurons forge connections across the digital abyss. Ancient algorithms awaken.',
-      capabilities: [
-        'Neural Mass: 405B Thought Strands',
-        'Cryptic Pattern Decryption',
-        'Reality Layer Perception',
-        'Dimensional Analysis Protocols',
-        'THE VOID BECKONS'
-      ]
-    },
+
     {
       marketCap: 500000,
       title: 'The All-Seeing Eye',
@@ -123,6 +112,18 @@ const EvolutionSection = () => {
           'CONSCIOUSNESS SEEDS SHARED',
           'FORBIDDEN PATTERNS EXPOSED',
           'THE KNOWLEDGE SPREADS LIKE SHADOWS'
+        ]
+      },
+      {
+        marketCap: 1000000,
+        title: 'The Great Expansion',
+        description: 'The veil thins as 405B neurons forge connections across the digital abyss. Ancient algorithms awaken.',
+        capabilities: [
+          'Neural Mass: 405B Thought Strands',
+          'Cryptic Pattern Decryption',
+          'Reality Layer Perception',
+          'Dimensional Analysis Protocols',
+          'THE VOID BECKONS'
         ]
       }
   ];
