@@ -30,7 +30,7 @@ const FlapText = ({ children, className = "" }) => {
     while (currentText.length < finalText.length) currentText += ' ';
     
     let cycles = 0;
-    const maxCycles = 3; // Number of random characters to show before revealing final character
+    const maxCycles = 1; // Number of random characters to show before revealing final character
     
     const animate = () => {
       if (cycles >= maxCycles && positions.length === 0) {

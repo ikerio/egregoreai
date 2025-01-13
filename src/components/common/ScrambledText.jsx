@@ -1,21 +1,18 @@
-// src/components/common/ScrambledText.jsx
+// ScrambledText.jsx
 import React, { useState, useEffect, useRef } from 'react';
 
-const ScrambledText = ({ children, className = "" }) => {
+const ScrambledText = ({ children, className = "", preserveFormat = false }) => {
   const originalText = children.toString();
   const [displayText, setDisplayText] = useState(originalText);
   const [isHovering, setIsHovering] = useState(false);
-  const animationPhase = useRef('scrambling'); // 'scrambling', 'returning', 'idle'
   const animationRef = useRef(null);
-  
-  // Characters for the flap effect - mix of ASCII art characters
+
   const chars = '█▓▒░⎯⌇⌎┃━│¦⎢⎥⎮╎⎪╏┆┇┊┋╵╷╹╻';
-  
-  // Preserve whitespace and special characters
+
   const preserveSpecialChars = (original, scrambled) => {
     const result = scrambled.split('');
     for (let i = 0; i < original.length; i++) {
-      if (original[i].match(/[\s\[\]←→↑|$>-]/)) {
+      if (original[i].match(/[\s\[\]$\-←→↑|>]/)) {
         result[i] = original[i];
       }
     }
@@ -28,51 +25,41 @@ const ScrambledText = ({ children, className = "" }) => {
     }
 
     let currentIndex = 0;
-    let rounds = 0;
-    const maxRounds = 2;
+    // Increase speed by processing multiple characters per frame
+    const charsPerFrame = 3;
 
     const animate = () => {
-      setDisplayText(prev => {
+      setDisplayText((prev) => {
         const textArray = prev.split('');
         
-        if (isHovering) {
-          // Return to original text
+        // Process multiple characters per frame
+        for(let i = 0; i < charsPerFrame; i++) {
           if (currentIndex < textArray.length) {
-            const targetChar = originalText[currentIndex];
-            if (!targetChar.match(/[\s\[\]←→↑|$>-]/)) {
-              textArray[currentIndex] = targetChar;
+            if (isHovering) {
+              const targetChar = originalText[currentIndex];
+              if (!targetChar.match(/[\s\[\]$\-←→↑|>]/)) {
+                textArray[currentIndex] = targetChar;
+              }
+            } else {
+              const originalChar = originalText[currentIndex];
+              if (!originalChar.match(/[\s\[\]$\-←→↑|>]/)) {
+                textArray[currentIndex] = chars[Math.floor(Math.random() * chars.length)];
+              }
             }
-          }
-        } else {
-          // Scramble text
-          if (currentIndex < textArray.length) {
-            const originalChar = originalText[currentIndex];
-            if (!originalChar.match(/[\s\[\]←→↑|$>-]/)) {
-              textArray[currentIndex] = chars[Math.floor(Math.random() * chars.length)];
-            }
+            currentIndex++;
           }
         }
 
-        currentIndex++;
         if (currentIndex >= originalText.length) {
           currentIndex = 0;
-          rounds++;
-          
-          if (isHovering && rounds >= 1) {
-            clearInterval(animationRef.current);
-            return originalText;
-          }
-          
-          if (!isHovering && rounds >= maxRounds) {
-            rounds = 0; // Keep scrambling when not hovering
-          }
         }
 
         return preserveSpecialChars(originalText, textArray.join(''));
       });
     };
 
-    animationRef.current = setInterval(animate, 1);
+    // Increased animation speed by reducing interval time
+    animationRef.current = setInterval(animate, 5);
 
     return () => {
       if (animationRef.current) {
@@ -82,12 +69,21 @@ const ScrambledText = ({ children, className = "" }) => {
   }, [isHovering, originalText]);
 
   return (
-    <div 
+    <div
       className={`cursor-pointer ${className}`}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
-      <pre className="font-mono whitespace-pre">
+      <pre
+        className={`font-mono ${
+          preserveFormat ? 'whitespace-pre' : 'whitespace-pre-wrap'
+        } break-words`}
+        style={{
+          overflowWrap: 'break-word',
+          wordBreak: 'break-word',
+          maxWidth: '100%'
+        }}
+      >
         {displayText}
       </pre>
     </div>

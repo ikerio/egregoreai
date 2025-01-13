@@ -1,91 +1,70 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';  // Removed useEffect since we won't need it
 import Header from './Header';
 import HeroSection from './HeroSection';
+import Manifesto from './Manifesto';
 import FeaturesSection from './FeaturesSection';
 import ArchitectureSection from './ArchitectureSection';
 import DocumentationSection from './DocumentationSection';
 import AboutSection from './AboutSection';
 import EvolutionSection from './EvolutionSection';
 import Footer from './Footer';
-import { ContentSection } from './common/ContentSection';
-import BreathingAscii from './common/BreathingAscii';
 import AnalysisSection from './AnalysisSection';
+import BreathingAscii from './common/BreathingAscii';
 
 const EgregoreWebsite = () => {
-  const [activeSection, setActiveSection] = useState(0);
   const [scrolled, setScrolled] = useState(false);
   const [isFeatureExpanded, setIsFeatureExpanded] = useState(false);
-  const [scrollingEnabled, setScrollingEnabled] = useState(true);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-  
-      if (!scrollingEnabled) return;
-  
-      const scrollPosition = window.scrollY + window.innerHeight * 0.4; // Reduced trigger point
-      const viewportHeight = window.innerHeight;
-      const featuresHeight = isFeatureExpanded ? viewportHeight * 1.5 : viewportHeight;
-      
-      // Reduced spacing between sections
-      if (scrollPosition < viewportHeight * 1) {
-        setActiveSection(0);
-      } else if (scrollPosition < viewportHeight * 0.8 + featuresHeight) {
-        setActiveSection(1);
-      } else if (scrollPosition < (viewportHeight * 0.8 + featuresHeight + viewportHeight)) {
-        setActiveSection(2);
-      } else if (scrollPosition < (viewportHeight * 0.8 + featuresHeight + viewportHeight * 1.8)) {
-        setActiveSection(3);
-      } else if (scrollPosition < (viewportHeight * 0.8 + featuresHeight + viewportHeight * 2.6)) {
-        setActiveSection(4);
-      } else {
-        setActiveSection(5);
-      }
-    };
-  
+  // Simple scroll detection for header only
+  const handleScroll = () => {
+    setScrolled(window.scrollY > 50);
+  };
+
+  React.useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [isFeatureExpanded, scrollingEnabled]);
+  }, []);
 
   return (
-    <div className="bg-zinc-900 text-zinc-300 font-mono w-full min-h-screen">
+    <div className="bg-zinc-900 text-zinc-300 font-mono w-full">
       <Header scrolled={scrolled} />
-      <HeroSection />
 
-      <div className="min-h-screen relative flex items-center justify-center">
-        <div className="container mx-auto mb-10 px-4 max-w-screen-xl">
-          <div className={`relative w-full transition-all duration-500 ${
-            isFeatureExpanded ? 'min-h-[900px]' : 'min-h-[600px]'
-          }`}>
-            <ContentSection active={activeSection === 0}>
-              <FeaturesSection onExpand={setIsFeatureExpanded} />
-            </ContentSection>
+      <div className="flex flex-col space-y-0">
+        <section className="min-h-screen flex items-center justify-center">
+          <HeroSection />
+        </section>
 
-            <ContentSection active={activeSection === 1} >
-              <ArchitectureSection />
-            </ContentSection>
+        <section className="min-h-screen flex items-center justify-center">
+          <Manifesto />
+        </section>
 
-            <ContentSection active={activeSection === 2} className="min-h-screen mb-10">
-              <DocumentationSection />
-            </ContentSection>
+        <section className="min-h-screen flex items-center justify-center">
+          <FeaturesSection onExpand={setIsFeatureExpanded} />
+        </section>
 
-            <ContentSection active={activeSection === 3} className="min-h-screen mb-10">
-              <AnalysisSection />
-            </ContentSection>
+        <section className="min-h-screen flex items-center justify-center">
+          <ArchitectureSection />
+        </section>
 
-            <ContentSection active={activeSection === 4} className="min-h-screen mb-20">
-              <EvolutionSection />
-            </ContentSection>
+        <section className="min-h-screen flex items-center justify-center">
+          <DocumentationSection />
+        </section>
 
-            <ContentSection active={activeSection === 2} className="ml-2 min-h-screen mb-20">
-              <BreathingAscii />
-            </ContentSection>
+        <section className="min-h-screen flex items-center justify-center">
+          <AnalysisSection />
+        </section>
 
-            <ContentSection active={activeSection === 5} className="min-h-screen mt-40">
-              <AboutSection />
-            </ContentSection>
-          </div>
-        </div>
+        <section className="min-h-screen flex items-center justify-center">
+          <EvolutionSection />
+        </section>
+
+        <section className="min-h-screen flex items-center justify-center">
+          <BreathingAscii />
+        </section>
+
+        <section className="min-h-screen flex items-center justify-center">
+          <AboutSection />
+        </section>
       </div>
 
       <Footer />
